@@ -41,8 +41,6 @@ export default function Home() {
         content: JSON.stringify(response, null, 2),
         timestamp: new Date()
       }
-
-      setMessages(prev => [...prev, assistantMessage])
     } catch (error) {
       console.error('API Error:', error)
       const errorMessage: ChatMessage = {
