@@ -24,11 +24,11 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY . .
 
 # 포트 노출
-EXPOSE 8000
+EXPOSE 8080
 
 # 헬스 체크 추가
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
+    CMD curl -f http://localhost:8080/health || exit 1
 
 # FastAPI 앱 실행
 CMD ["python", "run.py"]

@@ -56,7 +56,7 @@ app = FastAPI(
         "url": "https://opensource.org/licenses/MIT",
     },
     servers=[
-        {"url": "http://localhost:8000", "description": "Development server"},
+        {"url": "http://localhost:8080", "description": "Development server"},
         {"url": "https://gateway.example.com", "description": "Production server"},
     ],
     tags_metadata=[
