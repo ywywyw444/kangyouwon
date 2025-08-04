@@ -42,10 +42,5 @@
         }
       ]
     }
-  ],
-  "functions": {
-    "app/api/health/route.ts": {
-      "maxDuration": 10
-    }
-  }
-} 
+  ]
+}
