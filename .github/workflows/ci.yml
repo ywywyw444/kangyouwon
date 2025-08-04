@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         run: |
@@ -48,6 +49,7 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         run: |
@@ -101,6 +103,7 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         run: |
@@ -135,4 +138,4 @@ jobs:
         with:
           railway_token: ${{ secrets.RAILWAY_TOKEN }}
           service: ${{ secrets.RAILWAY_SERVICE }}
-          working_directory: ./frontend 
+          working_directory: ./frontend
