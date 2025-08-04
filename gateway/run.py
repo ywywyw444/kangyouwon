@@ -13,7 +13,7 @@ load_dotenv()
 if __name__ == "__main__":
     # 서버 설정
     host = os.getenv("GATEWAY_HOST", "0.0.0.0")
-    port = int(os.getenv("GATEWAY_PORT", "8000"))
+    port = int(os.getenv("GATEWAY_PORT", "8080"))
     reload = os.getenv("GATEWAY_RELOAD", "true").lower() == "true"
     
     print(f"🚀 Starting MSA Gateway on {host}:{port}")
