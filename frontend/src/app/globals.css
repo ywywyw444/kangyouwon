@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  body {
+    @apply bg-gray-900 text-white;
+  }
+}
+
+@layer components {
+  .chat-input {
+    @apply bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+  }
+  
+  .chat-button {
+    @apply bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white px-3 py-2 rounded-lg transition-colors duration-200;
+  }
+  
+  .chat-container {
+    @apply max-w-4xl mx-auto h-screen flex flex-col;
+  }
+  
+  .chat-header {
+    @apply flex items-center justify-between p-4 border-b border-gray-700 bg-gray-900;
+  }
+  
+  .chat-messages {
+    @apply flex-1 overflow-y-auto p-4 space-y-4;
+  }
+  
+  .chat-input-container {
+    @apply p-4 border-t border-gray-700 bg-gray-900;
+  }
+
+  /* ChatGPT 스타일 입력 컴포넌트 */
+  .bg-token-bg-primary {
+    @apply bg-gray-800;
+  }
+
+  .shadow-short {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .text-token-text-primary {
+    @apply text-white;
+  }
+
+  .contain-inline-size {
+    contain: inline-size;
+  }
+
+  .overflow-clip {
+    overflow: clip;
+  }
+
+  .bg-clip-padding {
+    background-clip: padding-box;
+  }
+
+  .default-browser {
+    scrollbar-width: thin;
+  }
+
+  .vertical-scroll-fade-mask {
+    mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+  }
+
+  /* 스크롤바 스타일링 */
+  .default-browser::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .default-browser::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .default-browser::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.5);
+    border-radius: 3px;
+  }
+
+  .default-browser::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.7);
+  }
+} 
