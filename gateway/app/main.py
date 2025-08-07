@@ -69,6 +69,11 @@ FILE_REQUIRED_SERVICES = set()
 async def health_check():
     return {"status": "healthy!"}
 
+@gateway_router.post("/login", summary="테스트 엔드포인트")
+async def login():
+    print("로그인 요청 받음")
+    return {"result": "로그인 성공"}
+
 @gateway_router.get("/{service}/{path:path}", summary="GET 프록시")
 async def proxy_get(
     service: ServiceType, 

@@ -7,127 +7,29 @@ services:
       - "8080:8080"
     volumes:
       - ./gateway:/app
-    env_file:
-      - ./gateway/.env
     environment:
       - PYTHONUNBUFFERED=1
-    restart: always
-    depends_on:
-      - chatbot-service
-      - gri-service
-      - materiality-service
-      - report-service
-      - tcfd-service
-      - redis
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
-    networks:
-      - app-network
-
-  chatbot-service:
-    build: ./service/chatbot-service
-    ports:
-      - "8001:8001"
-    volumes:
-      - ./service/chatbot-service/app:/app/app
-      - ./service/chatbot-service/requirements.txt:/app/requirements.txt
-    env_file:
-      - ./service/chatbot-service/.env
-    environment:
-      - PYTHONUNBUFFERED=1
-    restart: always
-    networks:
-      - app-network
-
-  gri-service:
-    build: ./service/gri-service
-    ports:
-      - "8002:8002"
-    volumes:
-      - ./service/gri-service/app:/app/app
-      - ./service/gri-service/requirements.txt:/app/requirements.txt
-    env_file:
-      - ./service/gri-service/.env
-    environment:
-      - PYTHONUNBUFFERED=1
-    restart: always
-    networks:
-      - app-network
-
-  materiality-service:
-    build: ./service/materiality-service
-    ports:
-      - "8003:8003"
-    volumes:
-      - ./service/materiality-service/app:/app/app
-      - ./service/materiality-service/requirements.txt:/app/requirements.txt
-    env_file:
-      - ./service/materiality-service/.env
-    environment:
-      - PYTHONUNBUFFERED=1
-    restart: always
-    networks:
-      - app-network
-
-  report-service:
-    build: ./service/report-service
-    ports:
-      - "8004:8004"
-    volumes:
-      - ./service/report-service/app:/app/app
-      - ./service/report-service/requirements.txt:/app/requirements.txt
-    env_file:
-      - ./service/report-service/.env
-    environment:
-      - PYTHONUNBUFFERED=1
-    restart: always
-    networks:
-      - app-network
-
-  tcfd-service:
-    build: ./service/tcfd-service
-    ports:
-      - "8005:8005"
-    volumes:
-      - ./service/tcfd-service/app:/app/app
-      - ./service/tcfd-service/requirements.txt:/app/requirements.txt
-    env_file:
-      - ./service/tcfd-service/.env
-    environment:
-      - PYTHONUNBUFFERED=1
+      - GATEWAY_HOST=0.0.0.0
+      - GATEWAY_PORT=8080
+      - GATEWAY_RELOAD=false
+      - LOG_LEVEL=INFO
     restart: always
     networks:
       - app-network
 
   redis:
-    image: redis:7-alpine
-    container_name: redis
+    image: redis:alpine
     ports:
       - "6379:6379"
-    networks:
-      - app-network
-    restart: always
-
-  n8n:
-    build:
-      context: ./n8n
-    container_name: n8n-container
-    ports:
-      - "5678:5678"
-    env_file:
-      - ./n8n/.env
     volumes:
-      - ./n8n_data:/home/node/.n8n
+      - redis_data:/data
+    restart: always
     networks:
       - app-network
+
+volumes:
+  redis_data:
 
 networks:
   app-network:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.25.0.0/16
-
-volumes:
-  n8n_data:
