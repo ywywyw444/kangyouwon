@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 from contextlib import asynccontextmanager
 from fastapi import Request
 
-from app.router.auth_router import auth_router
-from http://app.www.google.jwt_auth_middleware import AuthMiddleware
+# from app.router.auth_router import auth_router
+from app.www.jwt_auth_middleware import AuthMiddleware
 from app.domain.discovery.model.service_discovery import ServiceDiscovery
 from app.domain.discovery.model.service_type import ServiceType
 from app.common.utility.constant.settings import Settings
@@ -20,7 +20,7 @@ if os.getenv("RAILWAY_ENVIRONMENT") != "true":
     load_dotenv()
 
 logging.basicConfig(
-    level=http://logging.INFO,
+    level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[logging.StreamHandler(sys.stdout)]
 )
@@ -28,11 +28,11 @@ logger = logging.getLogger("gateway_api")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    http://logger.info("🚀 Gateway API 서비스 시작")
+    logger.info("🚀 Gateway API 서비스 시작")
     # Settings 초기화 및 앱 state에 등록
     app.state.settings = Settings()
     yield
-    http://logger.info("🛑 Gateway API 서비스 종료")
+    logger.info("🛑 Gateway API 서비스 종료")
 
 app = FastAPI(
     title="Gateway API",
@@ -58,7 +58,7 @@ app.add_middleware(
 app.add_middleware(AuthMiddleware)
 
 gateway_router = APIRouter(prefix="/api/v1", tags=["Gateway API"])
-gateway_router.include_router(auth_router)
+# gateway_router.include_router(auth_router)
 # 필요시: gateway_router.include_router(user_router)
 app.include_router(gateway_router)
 
@@ -110,9 +110,9 @@ async def proxy_post(
 ):
     try:
         # 로깅
-        http://logger.info(f"🌈 POST 요청 받음: 서비스={service}, 경로={path}")
+        logger.info(f"🌈 POST 요청 받음: 서비스={service}, 경로={path}")
         if file:
-            http://logger.info(f"파일명: {file.filename}, 시트 이름: {sheet_names if sheet_names else '없음'}")
+            logger.info(f"파일명: {file.filename}, 시트 이름: {sheet_names if sheet_names else '없음'}")
 
         # 서비스 팩토리 생성
         factory = ServiceDiscovery(service_type=service)
@@ -136,11 +136,11 @@ async def proxy_post(
             
             # 파일이 제공된 경우 처리
             if file:
-                file_content = await http://file.read()
+                file_content = await file.read()
                 files = {'file': (file.filename, file_content, file.content_type)}
                 
                 # 파일 위치 되돌리기 (다른 코드에서 다시 읽을 수 있도록)
-                await http://file.seek(0)
+                await file.seek(0)
             
             # 시트 이름이 제공된 경우 처리
             if sheet_names:
@@ -151,7 +151,7 @@ async def proxy_post(
                 body = await request.body()
                 if not body:
                     # body가 비어있는 경우도 허용
-                    http://logger.info("요청 본문이 비어 있습니다.")
+                    logger.info("요청 본문이 비어 있습니다.")
             except Exception as e:
                 logger.warning(f"요청 본문 읽기 실패: {str(e)}")
                 
@@ -256,8 +256,7 @@ async def proxy_patch(service: ServiceType, path: str, request: Request):
 # app.include_router(gateway_router) # 중복된 라우터 등록 제거
 
 # 404 에러 핸들러
-@app
-.exception_handler(404)
+@app.exception_handler(404)
 async def not_found_handler(request: Request, exc):
     return JSONResponse(
         status_code=404,
@@ -265,8 +264,7 @@ async def not_found_handler(request: Request, exc):
     )
 
 # 기본 루트 경로
-@app
-.get("/")
+@app.get("/")
 async def root():
     return {"message": "Gateway API", "version": "0.1.0"}
 
@@ -274,4 +272,4 @@ async def root():
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("SERVICE_PORT", 8080))
-    http://uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=True)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=True)

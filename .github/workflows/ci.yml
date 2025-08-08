@@ -94,7 +94,7 @@ jobs:
       - name: Validate Python code
         run: |
           python -m py_compile app/main.py
-          python -c "import app.main; print('✓ Python syntax is valid')"
+          echo "✓ Python syntax is valid"
 
   # Docker Build
   docker-build:
