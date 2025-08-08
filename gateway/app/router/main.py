@@ -8,6 +8,7 @@ logger = logging.getLogger("gateway_api")
 
 @router.post("/login", summary="로그인 엔드포인트")
 async def login(request: Request):
+    logger.info("❤️❤️❤️❤️❤️login")
     try:
         body = await request.json()
         username = body.get("username")
@@ -40,6 +41,7 @@ async def login(request: Request):
 
 @router.post("/signup", summary="회원가입 엔드포인트")
 async def signup(request: Request):
+    logger.info("💚💚💚💚💚signup")
     try:
         body = await request.json()
         industry = body.get("industry")
