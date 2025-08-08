@@ -44,7 +44,7 @@ export default function SignupPage() {
 
     try {
       // Gateway API를 통해 auth-service로 회원가입 요청
-      const response = await axios.post('http://localhost:8080/api/v1/auth/signup', userData, {
+      const response = await axios.post('https://api.kangyouwon.com/', userData, {
         headers: {
           'Content-Type': 'application/json',
         }
