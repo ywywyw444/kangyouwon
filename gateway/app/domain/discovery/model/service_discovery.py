@@ -24,14 +24,14 @@ class ServiceDiscovery:
                 ServiceType.KOSPI: "http://localhost:8006",
             }
         else:
-            # 배포 환경 - 실제 서비스 URL 사용
+            # 배포 환경 - 실제 서비스 URL 사용 (임시로 로컬 테스트 서버 사용)
             self.service_urls = {
-                ServiceType.AUTH: "https://auth-service.kangyouwon.com",
-                ServiceType.CHATBOT: "https://chatbot-service.kangyouwon.com",
-                ServiceType.COMPANY: "https://company-service.kangyouwon.com",
-                ServiceType.DASHBOARD: "https://dashboard-service.kangyouwon.com",
-                ServiceType.FACILITY: "https://facility-service.kangyouwon.com",
-                ServiceType.KOSPI: "https://kospi-service.kangyouwon.com",
+                ServiceType.AUTH: "http://localhost:8001",
+                ServiceType.CHATBOT: "http://localhost:8002",
+                ServiceType.COMPANY: "http://localhost:8003",
+                ServiceType.DASHBOARD: "http://localhost:8004",
+                ServiceType.FACILITY: "http://localhost:8005",
+                ServiceType.KOSPI: "http://localhost:8006",
             }
     
     def get_service_url(self) -> str:
