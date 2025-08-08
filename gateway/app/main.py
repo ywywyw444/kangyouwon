@@ -98,7 +98,7 @@ async def proxy_post(
     sheet_names: Optional[List[str]] = Query(None, alias="sheet_name")
 ):
     try:
-        logger.info(f"🌈 POST 요청 받음: 서비스={service}, 경로={path}")
+        logger.info(f"🌈gateway.main.py🌈 POST 요청 받음: 서비스={service}, 경로={path}")
         
         factory = ServiceDiscovery(service_type=service)
         
@@ -138,6 +138,7 @@ app.include_router(gateway_router)
 # 기본 루트 경로
 @app.get("/")
 async def root():
+    logger.info(f"🌈gateway.main.py🌈")
     return {"message": "Gateway API", "version": "0.1.0"}
 
 # 404 핸들러
@@ -152,6 +153,7 @@ async def not_found_handler(request: Request, exc):
 
 # ✅ 앱 실행 (로컬 디버그용)
 if __name__ == "__main__":
+    logger.info(f"🌈gateway.main.py🌈")
     import uvicorn
     port = int(os.getenv("SERVICE_PORT", 8080))
     uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=True)
