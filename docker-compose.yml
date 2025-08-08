@@ -17,6 +17,22 @@ services:
     networks:
       - app-network
 
+  auth-service:
+    build: ./service/auth-service
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./service/auth-service:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SERVICE_PORT=8001
+      - LOG_LEVEL=INFO
+    restart: always
+    networks:
+      - app-network
+    depends_on:
+      - redis
+
   redis:
     image: redis:alpine
     ports:

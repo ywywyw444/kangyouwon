@@ -10,8 +10,13 @@ from contextlib import asynccontextmanager
 
 from app.www.jwt_auth_middleware import AuthMiddleware
 from app.common.utility.constant.settings import Settings
-from app.router.main import router as gateway_router  # ✅ router로부터 가져옴
-from app.www.request_logging import RequestLoggingMiddleware
+from app.www.request_loggin import RequestLoggingMiddleware
+from fastapi import APIRouter, Request, HTTPException, UploadFile, File, Query, Form, Depends
+from fastapi.responses import JSONResponse
+from typing import Optional, List
+from app.domain.discovery.model.service_discovery import ServiceDiscovery
+from app.domain.discovery.model.service_type import ServiceType
+from app.common.utility.factory.response_factory import ResponseFactory
 
 # 로컬 환경에서만 .env 로드
 if os.getenv("RAILWAY_ENVIRONMENT") != "true":
@@ -61,8 +66,74 @@ app.add_middleware(
 app.add_middleware(AuthMiddleware)
 app.add_middleware(RequestLoggingMiddleware, log_body=True)
 
-# ✅ 라우터 등록 (router/main.py 내부에서 정의된 router)
-app.include_router(gateway_router, prefix="/api/v1", tags=["Gateway API"])
+# Gateway 라우터 정의
+gateway_router = APIRouter(prefix="/api/v1", tags=["Gateway API"])
+
+# 프록시 라우터 추가
+@gateway_router.get("/{service}/{path:path}", summary="GET 프록시")
+async def proxy_get(service: ServiceType, path: str, request: Request):
+    try:
+        factory = ServiceDiscovery(service_type=service)
+        headers = dict(request.headers)
+        
+        response = await factory.request(
+            method="GET",
+            path=path,
+            headers=headers
+        )
+        return ResponseFactory.create_response(response)
+    except Exception as e:
+        logger.error(f"Error in GET proxy: {str(e)}")
+        return JSONResponse(
+            content={"detail": f"Error processing request: {str(e)}"},
+            status_code=500
+        )
+
+@gateway_router.post("/{service}/{path:path}", summary="POST 프록시")
+async def proxy_post(
+    service: ServiceType, 
+    path: str,
+    request: Request,
+    file: Optional[UploadFile] = None,
+    sheet_names: Optional[List[str]] = Query(None, alias="sheet_name")
+):
+    try:
+        logger.info(f"🌈 POST 요청 받음: 서비스={service}, 경로={path}")
+        
+        factory = ServiceDiscovery(service_type=service)
+        
+        # 헤더에서 Content-Length 제거 (httpx가 자동으로 계산)
+        headers = dict(request.headers)
+        headers.pop('content-length', None)
+        
+        # 요청 본문을 한 번만 읽기
+        body = await request.body()
+        data = None
+        if body:
+            try:
+                import json
+                data = json.loads(body)
+            except:
+                pass
+        
+        response = await factory.request(
+            method="POST",
+            path=path,
+            headers=headers,
+            data=data
+        )
+        
+        return ResponseFactory.create_response(response)
+        
+    except Exception as e:
+        logger.error(f"POST 요청 처리 중 오류 발생: {str(e)}")
+        return JSONResponse(
+            content={"detail": f"Gateway error: {str(e)}"},
+            status_code=500
+        )
+
+# ✅ 라우터 등록
+app.include_router(gateway_router)
 
 # 기본 루트 경로
 @app.get("/")
