@@ -11,6 +11,7 @@ from contextlib import asynccontextmanager
 from app.www.jwt_auth_middleware import AuthMiddleware
 from app.common.utility.constant.settings import Settings
 from app.router.main import router as gateway_router  # ✅ router로부터 가져옴
+from app.www.request_logging import RequestLoggingMiddleware
 
 # 로컬 환경에서만 .env 로드
 if os.getenv("RAILWAY_ENVIRONMENT") != "true":
@@ -47,7 +48,9 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "http://frontend:3000"
+        "http://frontend:3000",
+        "https://kangyouwon.com",
+        "https://www.kangyouwon.com"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -56,6 +59,7 @@ app.add_middleware(
 
 # 미들웨어 등록
 app.add_middleware(AuthMiddleware)
+app.add_middleware(RequestLoggingMiddleware, log_body=True)
 
 # ✅ 라우터 등록 (router/main.py 내부에서 정의된 router)
 app.include_router(gateway_router, prefix="/api/v1", tags=["Gateway API"])
