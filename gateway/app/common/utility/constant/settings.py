@@ -4,17 +4,20 @@ from typing import Optional
 class Settings:
     def __init__(self):
         self.gateway_host = os.getenv("GATEWAY_HOST", "0.0.0.0")
-        self.gateway_port = int(os.getenv("GATEWAY_PORT", 8000))
+        self.gateway_port = int(os.getenv("GATEWAY_PORT", 8080))
         self.gateway_reload = os.getenv("GATEWAY_RELOAD", "false").lower() == "true"
         self.log_level = os.getenv("LOG_LEVEL", "INFO")
         
         # Service URLs
-        self.account_service_url = os.getenv("ACCOUNT_SERVICE_URL")
+        self.gateway_service_url = os.getenv("GATEWAY_SERVICE_URL")
         self.chatbot_service_url = os.getenv("CHATBOT_SERVICE_URL")
-        self.company_service_url = os.getenv("COMPANY_SERVICE_URL")
-        self.dashboard_service_url = os.getenv("DASHBOARD_SERVICE_URL")
-        self.facility_service_url = os.getenv("FACILITY_SERVICE_URL")
-        self.kospi_service_url = os.getenv("KOSPI_SERVICE_URL")
+        self.materiality_service_url = os.getenv("MATERIALITY_SERVICE_URL")
+        self.gri_service_url = os.getenv("GRI_SERVICE_URL")
+        self.grireport_service_url = os.getenv("GRIREPORT_SERVICE_URL")
+        self.tcfd_service_url = os.getenv("TCFD_SERVICE_URL")
+        self.tcfdreport_service_url = os.getenv("TCFDREPORT_SERVICE_URL")
+        self.survey_service_url = os.getenv("SURVEY_SERVICE_URL")
+        self.auth_service_url = os.getenv("AUTH_SERVICE_URL")
         
         # Redis settings
         self.redis_host = os.getenv("REDIS_HOST", "localhost")

@@ -16,9 +16,9 @@ run_container() {
     echo "🐳 컨테이너 실행 중..."
     docker run -d \
         --name msa-gateway \
-        -p 8000:8000 \
+        -p 8080:8080 \
         -e GATEWAY_HOST=0.0.0.0 \
-        -e GATEWAY_PORT=8000 \
+        -e GATEWAY_PORT=8080 \
         -e GATEWAY_RELOAD=false \
         -e LOG_LEVEL=INFO \
         --restart unless-stopped \
@@ -106,7 +106,7 @@ esac
 
 echo ""
 echo "🌐 Gateway 접속 정보:"
-echo "  - URL: http://localhost:8000"
-echo "  - Health Check: http://localhost:8000/health"
-echo "  - API Docs: http://localhost:8000/docs"
-echo "  - Services: http://localhost:8000/services" 
+echo "  - URL: http://localhost:8080"
+echo "  - Health Check: http://localhost:8080/health"
+echo "  - API Docs: http://localhost:8080/docs"
+echo "  - Services: http://localhost:8080/services" 

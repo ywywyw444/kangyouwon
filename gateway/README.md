@@ -31,16 +31,16 @@ cp env.example .env
 python run.py
 
 # 방법 2: uvicorn 직접 실행
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload
 ```
 
 ## 📚 API 문서
 
 Gateway는 완전한 API 문서화를 제공합니다:
 
-- **Swagger UI**: `http://localhost:8000/docs`
-- **ReDoc**: `http://localhost:8000/redoc`
-- **OpenAPI JSON**: `http://localhost:8000/openapi.json`
+- **Swagger UI**: `http://localhost:8080/docs`
+- **ReDoc**: `http://localhost:8080/redoc`
+- **OpenAPI JSON**: `http://localhost:8080/openapi.json`
 
 ### Swagger UI 특징
 - ✅ 실시간 API 테스트
@@ -136,7 +136,7 @@ curl -X POST http://localhost:8000/services/register \
 
 ### 환경 변수
 - `GATEWAY_HOST`: Gateway 호스트 (기본값: 0.0.0.0)
-- `GATEWAY_PORT`: Gateway 포트 (기본값: 8000)
+- `GATEWAY_PORT`: Gateway 포트 (기본값: 8080)
 - `GATEWAY_RELOAD`: 자동 리로드 (기본값: true)
 
 ### 서비스 URL 설정
@@ -153,17 +153,17 @@ curl -X POST http://localhost:8000/services/register \
 ### 로그 확인
 Gateway는 모든 요청과 응답을 로깅합니다:
 ```
-INFO: Request: GET http://localhost:8000/account/users
+INFO: Request: GET http://localhost:8080/account/users
 INFO: Response: 200 - 0.123s
 ```
 
 ### 헬스 체크
 ```bash
 # Gateway 헬스 체크
-curl http://localhost:8000/health
+curl http://localhost:8080/health
 
 # 모든 서비스 헬스 체크
-curl -X POST http://localhost:8000/services/health/all
+curl -X POST http://localhost:8080/services/health/all
 ```
 
 ## 🚀 배포
@@ -178,7 +178,7 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-EXPOSE 8000
+EXPOSE 8080
 CMD ["python", "run.py"]
 ```
 
@@ -189,10 +189,10 @@ services:
   gateway:
     build: .
     ports:
-      - "8000:8000"
+      - "8080:8080"
     environment:
       - GATEWAY_HOST=0.0.0.0
-      - GATEWAY_PORT=8000
+      - GATEWAY_PORT=8080
 ```
 
 ## 🔒 보안

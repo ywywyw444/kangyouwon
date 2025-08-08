@@ -2,9 +2,10 @@ from enum import Enum
 
 class ServiceType(Enum):
     AUTH = "auth"
-    ACCOUNT = "account"
     CHATBOT = "chatbot"
-    COMPANY = "company"
-    DASHBOARD = "dashboard"
-    FACILITY = "facility"
-    KOSPI = "kospi"
+    MATERIALITY = "materiality"
+    GRI = "gri"
+    GRIREPORT = "grireport"
+    TCFD = "tcfd"
+    TCFDREPORT = "tcfdreport"
+    SURVEY = "survey"
