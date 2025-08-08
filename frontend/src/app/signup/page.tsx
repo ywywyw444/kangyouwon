@@ -43,10 +43,17 @@ export default function SignupPage() {
     alert(`이벤트 데이터:\n${JSON.stringify(eventData, null, 2)}`)
 
     try {
-      // 도메인에서는 Gateway를 통해 요청
-      const apiUrl = process.env.NODE_ENV === 'development' 
+      // 환경에 따라 API URL 결정
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const apiUrl = isLocalhost 
         ? 'http://localhost:8001/auth/signup'
         : 'https://api.kangyouwon.com/api/v1/auth/signup';
+      
+      console.log('🔍 환경 감지:', {
+        hostname: window.location.hostname,
+        isLocalhost,
+        apiUrl
+      });
         
       const response = await axios.post(apiUrl, userData, {
         headers: {
