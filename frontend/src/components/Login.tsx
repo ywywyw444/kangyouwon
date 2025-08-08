@@ -18,8 +18,12 @@ export default function Login() {
     setIsLoading(true)
     
     try {
-      // Gateway API로 로그인 요청
-      const response = await axios.post('http://localhost:8080/api/v1/auth/login', userData, {
+      // 로컬 개발 환경에서는 직접 auth-service에 요청
+      const apiUrl = process.env.NODE_ENV === 'development' 
+        ? 'http://localhost:8001/auth/login'
+        : 'http://localhost:8080/api/v1/auth/login';
+        
+      const response = await axios.post(apiUrl, userData, {
         headers: {
           'Content-Type': 'application/json',
         }
