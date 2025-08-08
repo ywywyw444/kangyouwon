@@ -23,13 +23,13 @@ export default function Login() {
       const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('localhost');
       const isProduction = hostname === 'www.kangyouwon.com' || hostname === 'kangyouwon.com' || hostname.includes('kangyouwon.com');
       
-      // 환경에 따라 API URL 결정
-      let apiUrl;
-             if (isLocalhost) {
+             // 환경에 따라 API URL 결정
+       let apiUrl;
+       if (isLocalhost) {
          // 로컬 개발 환경
          apiUrl = 'http://localhost:8008/auth/login';
        } else {
-         // Railway 배포 환경
+         // Railway 배포 환경 - Gateway를 통해 요청
          apiUrl = 'https://api.kangyouwon.com/api/v1/auth/login';
        }
       
