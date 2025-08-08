@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Cookie, HTTPException, Query
 from fastapi.responses import JSONResponse
-from app.domain.controller.auth_controller import AuthController, LoginRequest
+from app.domain.controller.auth_controller import AuthController, LoginRequest, SignupRequest
 
 # Google OAuth는 나중에 구현
 # from app.domain.auth.controller.google_controller import GoogleController
@@ -14,7 +14,28 @@ async def login(login_data: LoginRequest):
     """
     사용자명과 비밀번호로 로그인을 처리합니다.
     """
-    return await auth_controller.login(login_data)
+    import logging
+    logger = logging.getLogger("auth_service")
+    logger.info("❤️❤️❤️❤️❤️login")
+    logger.info(f"🔐 로그인 시도 - 사용자명: {login_data.username}")
+    
+    result = await auth_controller.login(login_data)
+    logger.info(f"🔐 로그인 성공 - 사용자명: {login_data.username}")
+    return result
+
+@auth_router.post("/signup", summary="사용자 회원가입")
+async def signup(signup_data: SignupRequest):
+    """
+    회원가입을 처리합니다.
+    """
+    import logging
+    logger = logging.getLogger("auth_service")
+    logger.info("💚💚💚💚💚signup")
+    logger.info(f"📝 회원가입 시도 - 아이디: {signup_data.auth_id}")
+    
+    result = await auth_controller.signup(signup_data)
+    logger.info(f"📝 회원가입 성공 - 아이디: {signup_data.auth_id}")
+    return result
 
 # @auth_router.get("/google/login", summary="Google 로그인 시작")
 # async def google_login(

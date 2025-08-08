@@ -8,14 +8,31 @@ logger = logging.getLogger("gateway_api")
 class ServiceDiscovery:
     def __init__(self, service_type: ServiceType):
         self.service_type = service_type
-        self.service_urls = {
-            ServiceType.AUTH: "http://auth-service:8001",
-            ServiceType.CHATBOT: "http://chatbot-service:8002",
-            ServiceType.COMPANY: "http://company-service:8003",
-            ServiceType.DASHBOARD: "http://dashboard-service:8004",
-            ServiceType.FACILITY: "http://facility-service:8005",
-            ServiceType.KOSPI: "http://kospi-service:8006",
-        }
+        
+        # 환경에 따라 URL 설정
+        import os
+        is_local = os.getenv("ENVIRONMENT", "local") == "local"
+        
+        if is_local:
+            # 로컬 개발 환경
+            self.service_urls = {
+                ServiceType.AUTH: "http://localhost:8001",
+                ServiceType.CHATBOT: "http://localhost:8002",
+                ServiceType.COMPANY: "http://localhost:8003",
+                ServiceType.DASHBOARD: "http://localhost:8004",
+                ServiceType.FACILITY: "http://localhost:8005",
+                ServiceType.KOSPI: "http://localhost:8006",
+            }
+        else:
+            # 배포 환경 - 실제 서비스 URL 사용
+            self.service_urls = {
+                ServiceType.AUTH: "https://auth-service.kangyouwon.com",
+                ServiceType.CHATBOT: "https://chatbot-service.kangyouwon.com",
+                ServiceType.COMPANY: "https://company-service.kangyouwon.com",
+                ServiceType.DASHBOARD: "https://dashboard-service.kangyouwon.com",
+                ServiceType.FACILITY: "https://facility-service.kangyouwon.com",
+                ServiceType.KOSPI: "https://kospi-service.kangyouwon.com",
+            }
     
     def get_service_url(self) -> str:
         """서비스 URL 반환"""

@@ -43,10 +43,10 @@ export default function SignupPage() {
     alert(`이벤트 데이터:\n${JSON.stringify(eventData, null, 2)}`)
 
     try {
-      // 로컬 개발 환경에서는 직접 auth-service에 요청
+      // 도메인에서는 Gateway를 통해 요청
       const apiUrl = process.env.NODE_ENV === 'development' 
         ? 'http://localhost:8001/auth/signup'
-        : 'http://localhost:8080/api/v1/auth/signup';
+        : 'https://api.kangyouwon.com/api/v1/auth/signup';
         
       const response = await axios.post(apiUrl, userData, {
         headers: {
