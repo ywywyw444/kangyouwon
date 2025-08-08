@@ -16,26 +16,26 @@ class ServiceDiscovery:
         if is_local:
             # 로컬 개발 환경
             self.service_urls = {
-                ServiceType.AUTH: "http://localhost:8008",
-                ServiceType.CHATBOT: "http://localhost:8001",
-                ServiceType.MATERIALITY: "http://localhost:8002",
-                ServiceType.GRI: "http://localhost:8003",
-                ServiceType.GRIREPORT: "http://localhost:8004",
-                ServiceType.TCFD: "http://localhost:8005",
-                ServiceType.TCFDREPORT: "http://localhost:8006",
-                ServiceType.SURVEY: "http://localhost:8007",
+                ServiceType.AUTH: "http://localhost:8001",
+                ServiceType.CHATBOT: "http://localhost:8002",
+                ServiceType.MATERIALITY: "http://localhost:8003",
+                ServiceType.GRI: "http://localhost:8004",
+                ServiceType.GRIREPORT: "http://localhost:8005",
+                ServiceType.TCFD: "http://localhost:8006",
+                ServiceType.TCFDREPORT: "http://localhost:8007",
+                ServiceType.SURVEY: "http://localhost:8008",
             }
         else:
             # 배포 환경 - 실제 서비스 URL 사용
             self.service_urls = {
-                ServiceType.AUTH: "http://auth-service:8008",
-                ServiceType.CHATBOT: "http://chatbot-service:8001",
-                ServiceType.MATERIALITY: "http://materiality-service:8002",
-                ServiceType.GRI: "http://gri-service:8003",
-                ServiceType.GRIREPORT: "http://grireport-service:8004",
-                ServiceType.TCFD: "http://tcfd-service:8005",
-                ServiceType.TCFDREPORT: "http://tcfdreport-service:8006",
-                ServiceType.SURVEY: "http://survey-service:8007",
+                ServiceType.AUTH: "http://auth-service:8001",
+                ServiceType.CHATBOT: "http://chatbot-service:8002",
+                ServiceType.MATERIALITY: "http://materiality-service:8003",
+                ServiceType.GRI: "http://gri-service:8004",
+                ServiceType.GRIREPORT: "http://grireport-service:8005",
+                ServiceType.TCFD: "http://tcfd-service:8006",
+                ServiceType.TCFDREPORT: "http://tcfdreport-service:8007",
+                ServiceType.SURVEY: "http://survey-service:8008",
             }
     
     def get_service_url(self) -> str:

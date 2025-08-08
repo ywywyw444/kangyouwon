@@ -24,11 +24,11 @@ export default function Login() {
       const isProduction = hostname === 'www.kangyouwon.com' || hostname === 'kangyouwon.com' || hostname.includes('kangyouwon.com');
       
       // 임시로 강제로 도메인 URL 사용 (테스트용)
-      let apiUrl = 'https://api.kangyouwon.com/api/v1/auth/login';
+      let apiUrl = 'http://auth-service:8008/login';
       
       // 로컬 테스트용 (필요시 주석 해제)
       // if (isLocalhost) {
-      //   apiUrl = 'http://localhost:8001/auth/login';
+        // apiUrl = 'http://localhost:8001/auth/login';
       // }
       
       console.log('🔍 환경 감지:', {
