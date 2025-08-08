@@ -32,11 +32,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# auth_router 정의
-auth_router = APIRouter(
-    tags=["auth"]
-)
+# auth_router import
+from app.router.auth_router import auth_router
 
+# 로그인 엔드포인트에 로거 추가
 @auth_router.post("/login", summary="로그인 엔드포인트")
 async def login(request: Request):
     logger.info("❤️❤️❤️❤️❤️login")

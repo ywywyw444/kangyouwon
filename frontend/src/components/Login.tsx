@@ -19,7 +19,7 @@ export default function Login() {
     
     try {
       // Gateway API로 로그인 요청
-      const response = await axios.post('http://localhost:8080/login', userData, {
+      const response = await axios.post('http://localhost:8080/api/v1/auth/login', userData, {
         headers: {
           'Content-Type': 'application/json',
         }
