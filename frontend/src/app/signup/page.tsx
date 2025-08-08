@@ -77,25 +77,66 @@ export default function SignupPage() {
       alert(`회원가입 성공!\n사용자: ${result.user.name}`)
       // 회원가입 성공 시 로그인 페이지로 이동
       router.push('/')
-    } catch (error) {
-      // axios 에러 처리
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          // 서버에서 오류 응답을 받은 경우
-          const errorMessage = error.response.data?.error || '알 수 없는 오류가 발생했습니다.'
-          alert(`회원가입 실패: ${errorMessage}`)
-        } else if (error.request) {
-          // 요청은 보냈지만 응답을 받지 못한 경우
-          alert('서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.')
-        } else {
-          // 요청 설정 중 오류가 발생한 경우
-          alert(`요청 오류: ${error.message}`)
-        }
-      } else {
-        // 기타 오류
-        alert(`연결 오류: ${error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.'}`)
-      }
-    } finally {
+         } catch (error) {
+       // axios 에러 처리
+       if (axios.isAxiosError(error)) {
+         if (error.response) {
+           // 서버에서 오류 응답을 받은 경우
+           const statusCode = error.response.status;
+           let errorMessage = '알 수 없는 오류가 발생했습니다.';
+           
+           // 상태 코드에 따른 상세한 오류 메시지
+           switch (statusCode) {
+             case 400:
+               errorMessage = '잘못된 요청입니다. 입력 정보를 확인해주세요.';
+               break;
+             case 401:
+               errorMessage = '인증에 실패했습니다. 입력 정보를 확인해주세요.';
+               break;
+             case 403:
+               errorMessage = '접근이 거부되었습니다. 권한을 확인해주세요.';
+               break;
+             case 404:
+               errorMessage = '요청한 서비스를 찾을 수 없습니다. 서버 설정을 확인해주세요.';
+               break;
+             case 409:
+               errorMessage = '이미 존재하는 사용자입니다. 다른 아이디를 사용해주세요.';
+               break;
+             case 500:
+               errorMessage = '서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+               break;
+             case 502:
+               errorMessage = '게이트웨이 오류가 발생했습니다. 서비스 연결을 확인해주세요.';
+               break;
+             case 503:
+               errorMessage = '서비스가 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도해주세요.';
+               break;
+             default:
+               errorMessage = error.response.data?.error || `서버 오류 (${statusCode}): 알 수 없는 오류가 발생했습니다.`;
+           }
+           
+           console.log('🔍 상세 오류 정보:', {
+             status: statusCode,
+             data: error.response.data,
+             headers: error.response.headers
+           });
+           
+           alert(`회원가입 실패: ${errorMessage}`);
+         } else if (error.request) {
+           // 요청은 보냈지만 응답을 받지 못한 경우
+           console.log('🔍 네트워크 오류:', error.request);
+           alert('서버에 연결할 수 없습니다. 네트워크 연결과 서버 상태를 확인해주세요.');
+         } else {
+           // 요청 설정 중 오류가 발생한 경우
+           console.log('🔍 요청 설정 오류:', error.message);
+           alert(`요청 설정 오류: ${error.message}`);
+         }
+       } else {
+         // 기타 오류
+         console.log('🔍 기타 오류:', error);
+         alert(`연결 오류: ${error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.'}`);
+       }
+     } finally {
       setIsLoading(false)
     }
   }
