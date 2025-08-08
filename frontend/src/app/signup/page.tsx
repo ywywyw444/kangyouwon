@@ -44,15 +44,24 @@ export default function SignupPage() {
 
     try {
       // 환경에 따라 API URL 결정
-      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiUrl = isLocalhost 
-        ? 'http://localhost:8001/auth/signup'
-        : 'https://api.kangyouwon.com/api/v1/auth/signup';
+      const hostname = window.location.hostname;
+      const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('localhost');
+      const isProduction = hostname === 'www.kangyouwon.com' || hostname === 'kangyouwon.com' || hostname.includes('kangyouwon.com');
+      
+      // 임시로 강제로 도메인 URL 사용 (테스트용)
+      let apiUrl = 'https://api.kangyouwon.com/api/v1/auth/signup';
+      
+      // 로컬 테스트용 (필요시 주석 해제)
+      // if (isLocalhost) {
+      //   apiUrl = 'http://localhost:8001/auth/signup';
+      // }
       
       console.log('🔍 환경 감지:', {
-        hostname: window.location.hostname,
+        hostname,
         isLocalhost,
-        apiUrl
+        isProduction,
+        apiUrl,
+        fullUrl: window.location.href
       });
         
       const response = await axios.post(apiUrl, userData, {
