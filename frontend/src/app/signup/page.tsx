@@ -48,15 +48,15 @@ export default function SignupPage() {
       const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('localhost');
       const isProduction = hostname === 'www.kangyouwon.com' || hostname === 'kangyouwon.com' || hostname.includes('kangyouwon.com');
       
-             // 환경에 따라 API URL 결정
-       let apiUrl;
-       if (isLocalhost) {
-         // 로컬 개발 환경
-         apiUrl = 'http://localhost:8008/auth/signup';
-       } else {
-         // Railway 배포 환경 - Gateway를 통해 요청
-         apiUrl = 'https://api.kangyouwon.com/api/v1/auth/signup';
-       }
+      // 환경에 따라 API URL 결정
+      let apiUrl;
+      if (isLocalhost) {
+        // 로컬 개발 환경 - Gateway를 통해 요청
+        apiUrl = 'http://localhost:8080/api/v1/auth/signup';
+      } else {
+        // Railway 배포 환경 - Gateway를 통해 요청
+        apiUrl = 'https://api.kangyouwon.com/api/v1/auth/signup';
+      }
       
       console.log('🔍 환경 감지:', {
         hostname,
@@ -65,6 +65,9 @@ export default function SignupPage() {
         apiUrl,
         fullUrl: window.location.href
       });
+      
+      console.log('📤 전송할 데이터:', userData);
+      console.log('🌐 요청 URL:', apiUrl);
         
       const response = await axios.post(apiUrl, userData, {
         headers: {
@@ -75,8 +78,16 @@ export default function SignupPage() {
       // axios는 성공 시 자동으로 response.data를 반환
       const result = response.data
 
-      // 회원가입 성공
-      alert(`회원가입 성공!\n사용자: ${result.user.name}`)
+      // 회원가입 성공 - 사용자 입력 데이터를 JSON 형식으로 표시
+      const userInputData = {
+        industry: userData.industry,
+        email: userData.email,
+        name: userData.name,
+        age: userData.age,
+        auth_id: userData.auth_id,
+        auth_pw: userData.auth_pw
+      }
+      alert(`회원가입 성공!\n사용자: ${result.user.name}\n\n입력한 데이터:\n${JSON.stringify(userInputData, null, 2)}`)
       // 회원가입 성공 시 로그인 페이지로 이동
       router.push('/')
          } catch (error) {

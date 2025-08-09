@@ -86,28 +86,28 @@ Gateway는 완전한 API 문서화를 제공합니다:
 
 ### 1. 서비스 목록 조회
 ```bash
-curl http://localhost:8000/services
+curl http://localhost:8080/services
 ```
 
 ### 2. 특정 서비스 헬스 체크
 ```bash
-curl -X POST http://localhost:8000/services/account-service/health
+curl -X POST http://localhost:8080/services/auth-service/health
 ```
 
 ### 3. Account Service 프록시 요청
 ```bash
 # 사용자 목록 조회
-curl http://localhost:8000/account/users
+curl http://localhost:8080/auth/users
 
 # 새 사용자 생성
-curl -X POST http://localhost:8000/account/users \
+curl -X POST http://localhost:8080/auth/users \
   -H "Content-Type: application/json" \
   -d '{"name": "John Doe", "email": "john@example.com"}'
 ```
 
 ### 4. 새 서비스 등록
 ```bash
-curl -X POST http://localhost:8000/services/register \
+curl -X POST http://localhost:8080/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "name": "new-service",

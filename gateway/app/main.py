@@ -67,7 +67,12 @@ app.add_middleware(AuthMiddleware)
 app.add_middleware(RequestLoggingMiddleware, log_body=True)
 
 # Gateway 라우터 정의
-gateway_router = APIRouter(prefix="/api/v1", tags=["Gateway API"])
+gateway_router = APIRouter(tags=["Gateway API"])
+
+@gateway_router.post("/{service}/{path:path}")
+async def proxy_post(...):
+    logger.info("🔥🔥🔥🔥 POST 프록시 진입함!")
+    ...
 
 # 프록시 라우터 추가
 @gateway_router.get("/{service}/{path:path}", summary="GET 프록시")
@@ -99,6 +104,8 @@ async def proxy_post(
 ):
     try:
         logger.info(f"🌈gateway.main.py🌈 POST 요청 받음: 서비스={service}, 경로={path}")
+        logger.info(f"🔗 요청 URL: {request.url}")
+        logger.info(f"📋 요청 헤더: {dict(request.headers)}")
         
         factory = ServiceDiscovery(service_type=service)
         
@@ -113,9 +120,31 @@ async def proxy_post(
             try:
                 import json
                 data = json.loads(body)
-            except:
+                
+                # 로그인/회원가입 데이터 구분하여 로깅
+                if path == "login":
+                    logger.info("🔐 === 로그인 요청 데이터 ===")
+                    logger.info(f"👤 사용자명: {data.get('username', 'N/A')}")
+                    logger.info(f"🔑 비밀번호: {'*' * len(data.get('password', '')) if data.get('password') else 'N/A'}")
+                    logger.info(f"📦 전체 로그인 데이터: {json.dumps(data, ensure_ascii=False, indent=2)}")
+                elif path == "signup":
+                    logger.info("📝 === 회원가입 요청 데이터 ===")
+                    logger.info(f"🏭 업종: {data.get('industry', 'N/A')}")
+                    logger.info(f"📧 이메일: {data.get('email', 'N/A')}")
+                    logger.info(f"👤 이름: {data.get('name', 'N/A')}")
+                    logger.info(f"🎂 나이: {data.get('age', 'N/A')}")
+                    logger.info(f"🆔 아이디: {data.get('auth_id', 'N/A')}")
+                    logger.info(f"🔑 비밀번호: {'*' * len(data.get('auth_pw', '')) if data.get('auth_pw') else 'N/A'}")
+                    logger.info(f"📦 전체 회원가입 데이터: {json.dumps(data, ensure_ascii=False, indent=2)}")
+                else:
+                    logger.info(f"📦 기타 POST 데이터: {json.dumps(data, ensure_ascii=False, indent=2)}")
+                    
+            except Exception as parse_error:
+                logger.warning(f"⚠️ JSON 파싱 실패: {parse_error}")
+                logger.warning(f"⚠️ 원본 데이터: {body}")
                 pass
         
+        logger.info(f"🚀 {service} 서비스로 요청 전송 중...")
         response = await factory.request(
             method="POST",
             path=path,
@@ -123,23 +152,30 @@ async def proxy_post(
             data=data
         )
         
+        logger.info(f"✅ {service} 서비스 응답 수신 완료")
         return ResponseFactory.create_response(response)
         
     except Exception as e:
-        logger.error(f"POST 요청 처리 중 오류 발생: {str(e)}")
+        logger.error(f"❌ POST 요청 처리 중 오류 발생: {str(e)}")
         return JSONResponse(
             content={"detail": f"Gateway error: {str(e)}"},
             status_code=500
         )
 
-# ✅ 라우터 등록
-app.include_router(gateway_router)
+# 헬스 체크 엔드포인트 (라우터에 추가)
+@gateway_router.get("/health")
+async def health_check():
+    logger.info("🔍 Gateway 헬스 체크 요청")
+    return {"status": "healthy", "service": "gateway", "version": "0.1.0"}
 
-# 기본 루트 경로
-@app.get("/")
+# 기본 루트 경로 (라우터에 추가)
+@gateway_router.get("/")
 async def root():
     logger.info(f"🌈gateway.main.py🌈")
     return {"message": "Gateway API", "version": "0.1.0"}
+
+# ✅ 라우터 등록
+app.include_router(gateway_router)
 
 # 404 핸들러
 from fastapi import Request

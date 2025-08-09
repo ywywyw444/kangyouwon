@@ -23,15 +23,15 @@ export default function Login() {
       const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('localhost');
       const isProduction = hostname === 'www.kangyouwon.com' || hostname === 'kangyouwon.com' || hostname.includes('kangyouwon.com');
       
-             // 환경에 따라 API URL 결정
-       let apiUrl;
-       if (isLocalhost) {
-         // 로컬 개발 환경
-         apiUrl = 'http://localhost:8008/auth/login';
-       } else {
-         // Railway 배포 환경 - Gateway를 통해 요청
-         apiUrl = 'https://api.kangyouwon.com/api/v1/auth/login';
-       }
+      // 환경에 따라 API URL 결정
+      let apiUrl;
+      if (isLocalhost) {
+        // 로컬 개발 환경 - Gateway를 통해 요청
+        apiUrl = 'http://localhost:8080/api/v1/auth/login';
+      } else {
+        // Railway 배포 환경 - Gateway를 통해 요청
+        apiUrl = 'https://api.kangyouwon.com/api/v1/auth/login';
+      }
       
       console.log('🔍 환경 감지:', {
         hostname,
@@ -40,6 +40,9 @@ export default function Login() {
         apiUrl,
         fullUrl: window.location.href
       });
+      
+      console.log('📤 전송할 데이터:', userData);
+      console.log('🌐 요청 URL:', apiUrl);
         
       const response = await axios.post(apiUrl, userData, {
         headers: {
@@ -50,8 +53,12 @@ export default function Login() {
       // axios는 성공 시 자동으로 response.data를 반환
       const result = response.data
       
-      // 로그인 성공
-      alert(`로그인 성공!\n사용자: ${result.user.username}`)
+      // 로그인 성공 - 사용자 입력 데이터를 JSON 형식으로 표시
+      const userInputData = {
+        username: userData.username,
+        password: userData.password
+      }
+      alert(`로그인 성공!\n사용자: ${result.user.username}\n\n입력한 데이터:\n${JSON.stringify(userInputData, null, 2)}`)
       // 로그인 성공 시 대시보드로 이동
       router.push('/dashboard')
          } catch (error) {

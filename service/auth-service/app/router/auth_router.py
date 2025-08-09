@@ -15,12 +15,19 @@ async def login(login_data: LoginRequest):
     사용자명과 비밀번호로 로그인을 처리합니다.
     """
     import logging
+    import json
     logger = logging.getLogger("auth_service")
-    logger.info("❤️❤️❤️❤️❤️login")
-    logger.info(f"🔐 로그인 시도 - 사용자명: {login_data.username}")
+    
+    logger.info("🔐 === Auth Service 로그인 요청 ===")
+    logger.info(f"👤 사용자명: {login_data.username}")
+    logger.info(f"🔑 비밀번호: {'*' * len(login_data.password) if login_data.password else 'N/A'}")
+    logger.info(f"📦 전체 로그인 데이터: {json.dumps(login_data.dict(), ensure_ascii=False, indent=2)}")
     
     result = await auth_controller.login(login_data)
-    logger.info(f"🔐 로그인 성공 - 사용자명: {login_data.username}")
+    
+    logger.info("✅ === Auth Service 로그인 처리 완료 ===")
+    logger.info(f"📤 응답 데이터: {json.dumps(result, ensure_ascii=False, indent=2)}")
+    
     return result
 
 @auth_router.post("/signup", summary="사용자 회원가입")
@@ -29,12 +36,23 @@ async def signup(signup_data: SignupRequest):
     회원가입을 처리합니다.
     """
     import logging
+    import json
     logger = logging.getLogger("auth_service")
-    logger.info("💚💚💚💚💚signup")
-    logger.info(f"📝 회원가입 시도 - 아이디: {signup_data.auth_id}")
+    
+    logger.info("📝 === Auth Service 회원가입 요청 ===")
+    logger.info(f"🏭 업종: {signup_data.industry}")
+    logger.info(f"📧 이메일: {signup_data.email}")
+    logger.info(f"👤 이름: {signup_data.name}")
+    logger.info(f"🎂 나이: {signup_data.age}")
+    logger.info(f"🆔 아이디: {signup_data.auth_id}")
+    logger.info(f"🔑 비밀번호: {'*' * len(signup_data.auth_pw) if signup_data.auth_pw else 'N/A'}")
+    logger.info(f"📦 전체 회원가입 데이터: {json.dumps(signup_data.dict(), ensure_ascii=False, indent=2)}")
     
     result = await auth_controller.signup(signup_data)
-    logger.info(f"📝 회원가입 성공 - 아이디: {signup_data.auth_id}")
+    
+    logger.info("✅ === Auth Service 회원가입 처리 완료 ===")
+    logger.info(f"📤 응답 데이터: {json.dumps(result, ensure_ascii=False, indent=2)}")
+    
     return result
 
 # @auth_router.get("/google/login", summary="Google 로그인 시작")

@@ -20,9 +20,25 @@ services:
   auth-service:
     build: ./service/auth-service
     ports:
-      - "8001:8001"
+      - "8008:8008"
     volumes:
       - ./service/auth-service:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SERVICE_PORT=8008
+      - LOG_LEVEL=INFO
+    restart: always
+    networks:
+      - app-network
+    depends_on:
+      - redis
+
+  chatbot-service:
+    build: ./service/chatbot-service
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./service/chatbot-service:/app
     environment:
       - PYTHONUNBUFFERED=1
       - SERVICE_PORT=8001
@@ -30,8 +46,90 @@ services:
     restart: always
     networks:
       - app-network
-    depends_on:
-      - redis
+
+  materiality-service:
+    build: ./service/materiality-service
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./service/materiality-service:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SERVICE_PORT=8002
+      - LOG_LEVEL=INFO
+    restart: always
+    networks:
+      - app-network
+
+  gri-service:
+    build: ./service/gri-service
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./service/gri-service:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SERVICE_PORT=8003
+      - LOG_LEVEL=INFO
+    restart: always
+    networks:
+      - app-network
+
+  grireport-service:
+    build: ./service/grireport-service
+    ports:
+      - "8004:8004"
+    volumes:
+      - ./service/grireport-service:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SERVICE_PORT=8004
+      - LOG_LEVEL=INFO
+    restart: always
+    networks:
+      - app-network
+
+  tcfd-service:
+    build: ./service/tcfd-service
+    ports:
+      - "8005:8005"
+    volumes:
+      - ./service/tcfd-service:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SERVICE_PORT=8005
+      - LOG_LEVEL=INFO
+    restart: always
+    networks:
+      - app-network
+
+  tcfdreport-service:
+    build: ./service/tcfdreport-service
+    ports:
+      - "8006:8006"
+    volumes:
+      - ./service/tcfdreport-service:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SERVICE_PORT=8006
+      - LOG_LEVEL=INFO
+    restart: always
+    networks:
+      - app-network
+
+  survey-service:
+    build: ./service/survey-service
+    ports:
+      - "8007:8007"
+    volumes:
+      - ./service/survey-service:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SERVICE_PORT=8007
+      - LOG_LEVEL=INFO
+    restart: always
+    networks:
+      - app-network
 
   redis:
     image: redis:alpine
